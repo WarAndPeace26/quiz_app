@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:quiz_app/pages/answer/results.dart';
 import 'package:quiz_app/utilities/data-classes/quiz.dart';
 
 class AnswerForm extends StatefulWidget {
@@ -15,25 +16,35 @@ class AnswerForm extends StatefulWidget {
 
 class _AnswerFormState extends State<AnswerForm> {
   int _pageNum = 0;
-  UniqueKey _formKey = UniqueKey();
   List<String> answers = [];
+  String? answer;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Center(
-        child: Form(
-            child: showQuestion(widget.quiz.questions[_pageNum])
+    print(answers);
+    if ((_pageNum<widget.quiz.questions.length)) {
+      return Scaffold(
+      appBar: AppBar(
+        automaticallyImplyLeading: false,
+        title: Text(
+            "Question ${_pageNum+1}"
         ),
+        centerTitle: true,
+      ),
+      body: Center(
+        child: showQuestion(widget.quiz.questions[_pageNum]),
       ),
     );
+    } else {
+      return ResultPage(quiz:widget.quiz, answers: answers);
+    }
   }
 
   Widget showQuestion(Question question){
+
     return Padding(
-      padding: const EdgeInsets.all(30.0),
+      padding: const EdgeInsets.all(20.0),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Text(
             question.statement,
@@ -41,9 +52,42 @@ class _AnswerFormState extends State<AnswerForm> {
               fontSize: 30,
             ),
           ),
-
+          const SizedBox(
+            height: 30,
+          ),
+          for(String option in question.options) ListTile(
+            leading: Radio<String>(
+              groupValue: answer,
+              value: option,
+              onChanged: (value){
+                setState(() {
+                  answer = value;
+                });
+              },
+            ),
+            title: Text(
+              option,
+            ),
+          ),
+          const SizedBox(
+            height: 30,
+          ),
+          ElevatedButton(
+            onPressed: (){
+              answers.add((answer==null)?"":answer!);
+              setState(() {
+                _pageNum+=1;
+                answer = "";
+              });
+            },
+            child: const Text(
+              "next"
+            ),
+          ),
         ],
       ),
     );
   }
+
+
 }
