@@ -55,9 +55,9 @@ class _QuizAnswerPageState extends State<QuizAnswerPage> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context){
-                            return AnswerForm(quiz: widget.quiz);
-                          }
+                        builder: (context){
+                          return AnswerForm(quiz: widget.quiz);
+                        }
                       ),
                   );
                 },

@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:quiz_app/utilities/data-classes/quiz.dart';
+import 'package:quiz_app/utilities/widgets.dart';
 
 class ResultPage extends StatelessWidget {
   const ResultPage({Key? key, required this.quiz, required this.answers}) : super(key: key);
@@ -27,39 +29,66 @@ class ResultPage extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          children: [
-            for(var i = 0; i<=counter;i++) Row(
+      body: ListView(
+        children: [
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Column(
               children: [
+                DataTable(
+                    columns: [
+                      DataColumn(label: Text("Question", style: Theme.of(context).textTheme.headline6,)),
+                      DataColumn(label: Text("Your answer", style: Theme.of(context).textTheme.headline6,)),
+                      DataColumn(label: Text("Right answer", style: Theme.of(context).textTheme.headline6,)),
+                      DataColumn(label: Text("Correct?", style: Theme.of(context).textTheme.headline6,)),
+                    ],
+                    rows: [
+                      for(var i = 0; i<=counter;i++) DataRow(
+                          cells: [
+                            DataCell(Text("${i + 1}", textAlign: TextAlign.center,)),
+                            DataCell(Text(answers[i], textAlign: TextAlign.center,)),
+                            DataCell(Text(quiz.questions[i].answer, textAlign: TextAlign.center,)),
+                            DataCell(Icon((correct[i])?Icons.check:Icons.close)),
+                          ],
+                      )
+                    ]
+                ),
+                addVerticalSpace(50),
                 Text(
-                  "Question ${i+1}"
-                ),
-                const SizedBox(
-                  width: 30,
-                ),Text(
-                  answers[i]
-                ),
-                const SizedBox(
-                  width: 30,
-                ),Text(
-                  quiz.questions[i].answer
-                ),
-                const SizedBox(
-                  width: 30,
-                ),
-                Icon(
-                    (correct[i])?Icons.check:Icons.close
+                    "The Score is: $score",
+                  style: Theme.of(context).textTheme.headline4,
                 ),
               ],
             ),
-            Text(
-              "Score $score",
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
+// for(var i = 0; i<=counter;i++) Row(
+//   children: [
+//     Text(
+//       "Question ${i+1}"
+//     ),
+//     const SizedBox(
+//       width: 30,
+//     ),Text(
+//       answers[i]
+//     ),
+//     const SizedBox(
+//       width: 30,
+//     ),Text(
+//       quiz.questions[i].answer
+//     ),
+//     const SizedBox(
+//       width: 30,
+//     ),
+//     Icon(
+//         (correct[i])?Icons.check:Icons.close
+//     ),
+//   ],
+// ),
+// Text(
+//   "Score $score",
+// ),
